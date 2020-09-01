@@ -5,14 +5,9 @@
 # !!! DO NOT RUN THIS BLINDLY !!! 
 # !!! THESE ARE HINTS ONLY !!! 
 
-#===Variables===============================================================================================================
-
-# Export Variables
-#
-export DEPLOYER="user" # Try to have Windows and WSL usernames same
-export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts" # Just emulate Linux file tree for artifacts
-
 #===Ansible=================================================================================================================
+
+# !!! Do WSL.sh first !!!
 
 # Make Sleep Always TRUE
 #
