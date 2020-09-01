@@ -7,3 +7,4 @@
 
 - .local/gbin/ssh-load-* :  Reuse your ssh-agent and ssh-agent.exe, enter passwords once per reboot :*
 
+- choco is comming soon...
