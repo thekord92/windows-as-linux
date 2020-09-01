@@ -1,0 +1,91 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+#====================================================================================================================================
+
+VDI_CONVERT = false
+VDI_SIZE = 20480
+
+VMDK_WIN = "#{ENV.fetch("VAGRANT_VMDK_WIN")}"
+VDI_WIN = "#{ENV.fetch("VAGRANT_VDI_WIN")}"
+VDI_WSL = "#{ENV.fetch("VAGRANT_VDI_WSL")}"
+
+#====================================================================================================================================
+
+Vagrant.configure("2") do |config|
+
+#------------------------------------------------------------------------------------------------------------------------------------
+
+  config.vm.box = "arabadj/centos8-devel"
+  config.vm.box_version = "1.0.5"
+
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  config.vm.synced_folder './synced_cmd', '/cmd', 
+    owner: "root", group: "root", mount_options: ["dmode=755,fmode=755"]
+
+  config.vm.synced_folder './synced_folder', '/vagrant', 
+    owner: "root", group: "root", mount_options: ["dmode=755,fmode=644"]
+
+#------------------------------------------------------------------------------------------------------------------------------------
+
+  config.vm.hostname = "#{ENV.fetch("VAGRANT_HOSTNAME")}"
+  config.vm.provider "virtualbox" do |vb|
+    if ARGV[0] == "up" && !File.exist?(File.expand_path(VDI_WSL)) && VDI_CONVERT
+      vb.customize "pre-boot", ["clonehd", VMDK_WIN, VDI_WIN, "--format", "VDI"]
+      vb.customize "pre-boot", ["modifyhd", VDI_WIN, "--resize", VDI_SIZE]
+      vb.customize "pre-boot", ["storageattach", :id, "--storagectl", "IDE", "--port", 0, "--device", 0, "--type", "hdd", "--medium", VDI_WIN]
+      vb.customize "pre-boot", ["closemedium", VMDK_WIN, "--delete"]
+    end
+    vb.name = "#{ENV.fetch("VAGRANT_HOSTNAME")}"
+    vb.memory = 2048
+    vb.cpus = 2
+  end
+
+#------------------------------------------------------------------------------------------------------------------------------------
+
+  config.vm.network :forwarded_port, guest: 22, host: "#{ENV.fetch("VAGRANT_SSH_PORT")}", id: "ssh"
+  config.vm.network "private_network", ip: "#{ENV.fetch("VAGRANT_IP_ADDR")}"
+  config.vm.network "public_network",
+    use_dhcp_assigned_default_route: true
+
+  config.vm.provision "route_nat", type: "shell", run: "always", inline: <<-ROUTE
+    ip route del default via $(ip route ls | grep default | grep eth2 | grep dhcp | awk '{print $3}') dev eth2 metric 75 &> /dev/null 
+    ip route rep default via $(ip route ls | grep default | grep eth0 | grep dhcp | awk '{print $3}') dev eth0 metric 75 &> /dev/null
+    echo IP: $(ip addr ls | grep global | awk '{print $2" "}' | cut -d "/" -f 1)
+    echo GW: $(ip route ls | head -1 | awk '{print $3}')
+    ROUTE
+
+  config.vm.provision "route_bridge", type: "shell", run: "never", inline: <<-ROUTE
+    ip route del default via $(ip route ls | grep default | grep eth0 | grep dhcp | awk '{print $3}') dev eth0 metric 75 &> /dev/null 
+    ip route rep default via $(ip route ls | grep default | grep eth2 | grep dhcp | awk '{print $3}') dev eth2 metric 75 &> /dev/null
+    echo IP: $(ip addr ls | grep global | awk '{print $2" "}' | cut -d "/" -f 1)
+    echo GW: $(ip route ls | head -1 | awk '{print $3}')
+    ROUTE
+
+#------------------------------------------------------------------------------------------------------------------------------------
+
+  config.ssh.forward_agent = true
+  config.ssh.insert_key = false
+  config.ssh.private_key_path = ["#{ENV.fetch("VAGRANT_SSH_INSECURE_KEY")}", "#{ENV.fetch("VAGRANT_SSH_PRIVATE_KEY")}"] 
+  config.vm.provision "file", source: "#{ENV.fetch("VAGRANT_SSH_PUBLIC_KEY")}", destination: "~/.ssh/authorized_keys"
+
+#------------------------------------------------------------------------------------------------------------------------------------
+  
+  config.vm.provision "bootstrap", type: "ansible" do |ansible|
+    ansible.playbook = "#{ENV.fetch("CONFIGURE_ROOT")}/bootstrap.yml"
+  end
+
+  config.vm.provision "disk_extend", run: "never", type: "shell" do |shell|
+    shell.inline = <<-EXTEND
+      echo ", +" | sfdisk -N 1 /dev/sda --no-reread
+      partprobe
+      xfs_growfs /dev/sda1
+      EXTEND
+  end
+
+#------------------------------------------------------------------------------------------------------------------------------------
+
+end
+
+#====================================================================================================================================
