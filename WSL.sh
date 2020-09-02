@@ -70,8 +70,6 @@ sudo ssh-keygen -A
 sudo service ssh --full-restart
 #
 
-# !!! MANAGE SSHD AFTER, ON YOUR OWN !!!
-
 #===Prerequisites===========================================================================================================
 
 # Install Prerequisites (not sure if all needed :-P )

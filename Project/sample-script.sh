@@ -11,6 +11,9 @@ for FUNCTION in $(cat $PROJECT_ROOT/environment.sh | grep "^function" | awk '{pr
 cd $PROJECT_ROOT
 #===========================================================================================================================
 
-vagrant destroy && rm -rf .vagrant/
+# Put your script below instead of echoes
+echo ""
+echo "Your \$PROJECT_ROOT is found at:   $PROJECT_ROOT"
+echo ""
 
 #===========================================================================================================================
