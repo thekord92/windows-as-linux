@@ -1,11 +1,10 @@
 #!/bin/bash
 
 #===VARIABLES===============================================================================================================
-export DEPLOYER="arabadj"
+export DEPLOYER="user"
 #---------------------------------------------------------------------------------------------------------------------------
 export CONFIGURE_ROOT="$PROJECT_ROOT/provisioning"
-# export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts"
-export FILESTORE="/mnt/c/Users/$DEPLOYER/OneDrive/Deployment/Linux"
+export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts"
 #---------------------------------------------------------------------------------------------------------------------------
 export WSL_REMOTE_PORT="2222"
 #---------------------------------------------------------------------------------------------------------------------------
