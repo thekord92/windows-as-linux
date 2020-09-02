@@ -8,12 +8,10 @@ export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts" # Copy Artifact examples her
 #---------------------------------------------------------------------------------------------------------------------------
 export WSL_REMOTE_PORT="2222"
 #---------------------------------------------------------------------------------------------------------------------------
-# Set your VirtualBox "Default Machine Folder" with gui to:
-# C:\Users\$DEPLOYER\VirtualBox
-#---------------------------------------------------------------------------------------------------------------------------
 export VAGRANT_HOSTNAME="vgr-project" # Set your vm name
 export VAGRANT_ID="10" # ID is appended to sbnet and port
-export VAGRANT_IP_ADDR="192.168.73.$VAGRANT_ID" # Check with your Windows "VirtualBox Host-Only Network" adapter subnet
+export VAGRANT_NETWORK_NAT="192.168.71.0/24" # Set your nat network subnet
+export VAGRANT_NETWORK_PRIVATE="192.168.73.$VAGRANT_ID" # Check with your "VirtualBox Host-Only Network" adapter subnet !!!
 export VAGRANT_SSH_PORT="22$VAGRANT_ID" # Do not edit
 export VAGRANT_SSH_PRIVATE_KEY="/mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.key"
 export VAGRANT_SSH_PUBLIC_KEY="/mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.pub"

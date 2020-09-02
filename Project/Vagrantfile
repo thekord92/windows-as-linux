@@ -34,6 +34,7 @@ Vagrant.configure("2") do |config|
       vb.customize "pre-boot", ["storageattach", :id, "--storagectl", "IDE", "--port", 0, "--device", 0, "--type", "hdd", "--medium", VDI_WIN]
       vb.customize "pre-boot", ["closemedium", VMDK_WIN, "--delete"]
     end
+    vb.customize ["modifyvm", :id, "--natnet1", "#{ENV.fetch("VAGRANT_NETWORK_NAT")}"]
     vb.name = "#{ENV.fetch("VAGRANT_HOSTNAME")}"
     vb.memory = 2048
     vb.cpus = 2
@@ -42,7 +43,7 @@ Vagrant.configure("2") do |config|
 #------------------------------------------------------------------------------------------------------------------------------------
 
   config.vm.network :forwarded_port, guest: 22, host: "#{ENV.fetch("VAGRANT_SSH_PORT")}", id: "ssh"
-  config.vm.network "private_network", ip: "#{ENV.fetch("VAGRANT_IP_ADDR")}"
+  config.vm.network "private_network", ip: "#{ENV.fetch("VAGRANT_NETWORK_PRIVATE")}"
   config.vm.network "public_network",
     use_dhcp_assigned_default_route: true
 

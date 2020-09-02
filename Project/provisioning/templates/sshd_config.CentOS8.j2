@@ -20,7 +20,8 @@ Port 22
 #ListenAddress 0.0.0.0
 #ListenAddress ::
 
-AllowUsers root {{ ansible_user }}@10.0.2.* {{ ansible_deployer }}
+AllowUsers root {{ ansible_user }} {{ ansible_deployer }}
+{# AllowUsers root {{ ansible_user }}@10.0.2.* {{ ansible_deployer }} #}
 
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_ecdsa_key
