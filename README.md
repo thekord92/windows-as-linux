@@ -1,3 +1,4 @@
+![picture](logo.png)
 
 # Better readme gonna be here...
 
@@ -11,3 +12,4 @@
 
 - environment.sh: is your best friend
 - always start your scripts with $PROJECT_ROOT search as shown in sample-script.sh 
+
