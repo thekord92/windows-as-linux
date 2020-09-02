@@ -5,6 +5,13 @@
 # !!! DO NOT RUN THIS BLINDLY !!! 
 # !!! THESE ARE HINTS ONLY !!! 
 
+#===Files===================================================================================================================
+
+# Your keys are located in: /mnt/c/Users/$DEPLOYER/.ssh/
+# Your private keys are named: id_rsa*.key
+# Your public keys are named: id_rsa*.pub
+# Your authorized_keys path: $HOME/.ssh/
+
 #===Variables===============================================================================================================
 
 # Export Variables
@@ -25,12 +32,9 @@ export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts" # Just emulate Linux file tr
 mkdir -p /home/$DEPLOYER/.ssh
     chmod 700 /home/$DEPLOYER/.ssh
 #
-cp $FILESTORE/home/$DEPLOYER/.ssh/id_rsa_$DEPLOYER.pub /home/$DEPLOYER/.ssh/
-    chmod 600 /home/$DEPLOYER/.ssh/id_rsa
-cp $FILESTORE/home/$DEPLOYER/.ssh/id_rsa_$DEPLOYER.pub /home/$DEPLOYER/.ssh/
+cp $FILESTORE/home/$DEPLOYER/.ssh/* /home/$DEPLOYER/.ssh/
+    chmod 600 /home/$DEPLOYER/.ssh/id_rsa_*.key
     chmod 644 /home/$DEPLOYER/.ssh/id_rsa.pub
-cp $FILESTORE/home/$DEPLOYER/.ssh/authorized_keys /home/$DEPLOYER/.ssh/
-    chmod 644 /home/$DEPLOYER/.ssh/authorized_keys
 #
 
 # Configure WSL Options:
@@ -57,7 +61,7 @@ net start LxssManager
 # Edit Lines:
 #
 # Port 2222
-# PasswordAuthentication yes
+# PasswordAuthentication yes # If do not want to use keys
 #
 
 # Enable SSH Server

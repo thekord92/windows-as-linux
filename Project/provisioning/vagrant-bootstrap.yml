@@ -1,0 +1,151 @@
+---
+
+# ====================================================================================================================================
+
+- name: BOOTSTRAPPING
+  hosts: all
+  
+  vars:
+    - ansible_deployer: "{{ lookup('env','ANSIBLE_DEPLOYER') }}"
+    - filestore: "{{ lookup('env','FILESTORE') }}"
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+  become: yes
+  become_user: root
+  
+# ====================================================================================================================================
+
+  tasks:
+
+ # ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Set Timezone
+      timezone:
+        name: Asia/Yerevan
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+ 
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Set Authorized Key (root)
+      authorized_key:
+        user: root
+        key: "{{ item }}"
+        state: present
+        exclusive: True
+      with_file:
+        - "{{ filestore }}/User/.ssh/id_rsa_{{ ansible_deployer }}.pub"
+
+    - name: Configure User
+      user:
+        name: "{{ ansible_deployer }}"
+        shell: /bin/bash
+        groups: wheel,docker
+        append: yes
+
+    - name: Set Authorized Key
+      authorized_key:
+        user: "{{ ansible_deployer }}"
+        key: "{{ item }}"
+        state: present
+        exclusive: True
+      with_file:
+        - "{{ filestore }}/User/.ssh/id_rsa_{{ ansible_deployer }}.pub"
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Set Sudoers 
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: "^%wheel"
+        line: "%wheel ALL=(ALL) NOPASSWD: ALL"
+        validate: "visudo -cf %s"
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Install Packages
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - vim
+        - wget
+        - figlet
+
+    - name: Enable Services
+      service: "name={{ item }} state=started enabled=yes"
+      with_items:
+        - docker
+
+    - name: Disable Services
+      service: "name={{ item }} state=stopped enabled=no"
+      with_items:
+        - rpcbind
+        - rpcbind.socket
+        - systemd-resolved
+        - firewalld
+
+    - name: Mask Services
+      service: "name={{ item }} masked=yes"
+      with_items:
+        - selinux-autorelabel-mark
+        - rpcbind
+        - firewalld
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Configure SSHd
+      template:
+        src: "./templates/sshd_config.CentOS8.j2"
+        dest: "/etc/ssh/sshd_config"
+        owner: root
+        group: root
+        mode: 0600
+      register: sshd_config
+
+    - name: Restart SSHd
+      service: name=sshd state=restarted
+      when: sshd_config.changed
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Make SSH Insecure
+      copy:
+        src: "./files/07-insecure.conf"
+        dest: "/etc/ssh/ssh_config.d/"
+        mode: 0644
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Set Grub
+      copy:
+        src: "./files/grub"
+        dest: "/etc/default/"
+        owner: root
+        group: root
+        mode: 0644
+      register: grub
+
+    - name: Make Grub
+      shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+      when: grub.changed
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Copy Docker-Destroy
+      copy:
+        src: "./files/docker-destroy"
+        dest: "/usr/local/bin/"
+        owner: root
+        group: root
+        mode: 0755
+
+# ====================================================================================================================================
+
+

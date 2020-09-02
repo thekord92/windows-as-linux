@@ -3,7 +3,7 @@
 
 #====================================================================================================================================
 
-VDI_CONVERT = false
+VDI_CONVERT = true
 VDI_SIZE = 20480
 
 VMDK_WIN = "#{ENV.fetch("VAGRANT_VMDK_WIN")}"
@@ -67,11 +67,28 @@ Vagrant.configure("2") do |config|
   config.ssh.private_key_path = ["#{ENV.fetch("VAGRANT_SSH_INSECURE_KEY")}", "#{ENV.fetch("VAGRANT_SSH_PRIVATE_KEY")}"] 
   config.vm.provision "file", source: "#{ENV.fetch("VAGRANT_SSH_PUBLIC_KEY")}", destination: "~/.ssh/authorized_keys"
 
+#====================================================================================================================================
+
 #------------------------------------------------------------------------------------------------------------------------------------
-  
-  config.vm.provision "bootstrap", type: "ansible" do |ansible|
-    ansible.playbook = "#{ENV.fetch("CONFIGURE_ROOT")}/bootstrap.yml"
+# If you want to configure with Ansible:
+# uncomment provisioners below
+# have your artifacts in $FILESTORE
+# check artifacts paths in playbooks starting with {{ filestore }} variable
+#------------------------------------------------------------------------------------------------------------------------------------
+
+  config.vm.provision "vagrant-bootstrap", type: "ansible" do |ansible|
+    ansible.playbook = "#{ENV.fetch("CONFIGURE_ROOT")}/vagrant-bootstrap.yml"
   end
+
+  config.vm.provision "vagrant-deplenv", type: "ansible" do |ansible|
+    ansible.playbook = "#{ENV.fetch("CONFIGURE_ROOT")}/vagrant-deplenv.yml"
+  end
+
+#------------------------------------------------------------------------------------------------------------------------------------
+# If you want to etend disk size:
+# set: VDI_CONVERT = true
+# run: DISK_EXTEND.sh
+#------------------------------------------------------------------------------------------------------------------------------------
 
   config.vm.provision "disk_extend", run: "never", type: "shell" do |shell|
     shell.inline = <<-EXTEND
@@ -81,7 +98,7 @@ Vagrant.configure("2") do |config|
       EXTEND
   end
 
-#------------------------------------------------------------------------------------------------------------------------------------
+#====================================================================================================================================
 
 end
 
