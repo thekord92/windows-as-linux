@@ -8,7 +8,7 @@
 
 - choco is comming soon...
 
-# The most the most-most-most imortant
+# The most-most-most imortant
 
 - environment.sh: is your best friend
 - always start your scripts with $PROJECT_ROOT search as shown in sample-script.sh 
