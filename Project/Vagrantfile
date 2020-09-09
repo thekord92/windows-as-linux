@@ -16,8 +16,8 @@ Vagrant.configure("2") do |config|
 
 #------------------------------------------------------------------------------------------------------------------------------------
 
-  config.vm.box = "arabadj/centos8-devel"
-  config.vm.box_version = "1.0.5"
+  config.vm.box = "arabadj/centos8-powerbox"
+  # config.vm.box_version = "1.0.5"
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
