@@ -70,6 +70,27 @@ sudo ssh-keygen -A
 sudo service ssh --full-restart
 #
 
+# Fix Sleep
+#
+# Do this if want to configure your WSL with Ansible
+[ ! -L "/usr/bin/sleep" ] && [ ! -f "/usr/bin/sleep.bak" ] && sudo mv /usr/bin/sleep /usr/bin/sleep.bak 
+# Option 1
+[ ! -L "/usr/bin/sleep" ] && [sudo ln -s /bin/true /usr/bin/sleep
+# Option 2
+sudo cat > /usr/bin/sleep <<-EOT
+#!/usr/bin/env python3
+
+import sys
+import time
+
+try:
+    time.sleep(int(sys.argv[1]))
+except:
+    quit()
+EOT
+chmod +x /usr/bin/sleep
+#
+
 #===Prerequisites===========================================================================================================
 
 # Install Prerequisites (not sure if all needed :-P )
@@ -80,4 +101,3 @@ sudo apt install wget
 #
 
 #===========================================================================================================================
-
