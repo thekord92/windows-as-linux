@@ -76,7 +76,7 @@ sudo service ssh --full-restart
 [ ! -L "/usr/bin/sleep" ] && [ ! -f "/usr/bin/sleep.bak" ] && sudo mv /usr/bin/sleep /usr/bin/sleep.bak 
 #
 # Option 1
-[ ! -L "/usr/bin/sleep" ] && [sudo ln -s /bin/true /usr/bin/sleep
+[ ! -L "/usr/bin/sleep" ] && sudo ln -s /bin/true /usr/bin/sleep
 # Option 2
 sudo cat > /usr/bin/sleep <<-EOT
 #!/usr/bin/env python3
