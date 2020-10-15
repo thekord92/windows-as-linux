@@ -16,7 +16,7 @@
 
 # Export Variables
 #
-export DEPLOYER="user" # Try to have Windows and WSL usernames same
+export DEPLOYER="$USER" # Try to have Windows and WSL usernames same
 export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts" # Just emulate Linux file tree for artifacts
 
 #===Vagrant=================================================================================================================

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #===VARIABLES===============================================================================================================
-export DEPLOYER="arabadj" # Put your username here
+export DEPLOYER="$USER" # Put your username here
 #---------------------------------------------------------------------------------------------------------------------------
 export CONFIGURE_ROOT="$PROJECT_ROOT/provisioning"
 export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts" # Copy Artifact examples here from repo
