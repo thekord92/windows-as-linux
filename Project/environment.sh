@@ -18,9 +18,6 @@ export VAGRANT_SSH_PORT="22$VAGRANT_ID" # Do not edit
 export VAGRANT_SSH_PRIVATE_KEY="/mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.key"
 export VAGRANT_SSH_PUBLIC_KEY="/mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.pub"
 export VAGRANT_SSH_INSECURE_KEY="/mnt/c/Users/$DEPLOYER/.vagrant.d/insecure_private_key" # Comes with Vagrant
-export VAGRANT_VMDK_WIN="C:/Users/$DEPLOYER/VirtualBox/$VAGRANT_HOSTNAME/box-disk001.vmdk" 
-export VAGRANT_VDI_WIN="C:/Users/$DEPLOYER/VirtualBox/$VAGRANT_HOSTNAME/box-disk001.vdi"
-export VAGRANT_VDI_WSL="/mnt/c/Users/$DEPLOYER/VirtualBox/$VAGRANT_HOSTNAME/box-disk001.vdi"
 #---------------------------------------------------------------------------------------------------------------------------
 export ANSIBLE_DEPLOYER="$DEPLOYER"
 export ANSIBLE_ACTION_WARNINGS="False"

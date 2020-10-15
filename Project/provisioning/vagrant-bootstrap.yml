@@ -18,6 +18,12 @@
 
   tasks:
 
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+ 
  # ------------------------------------------------------------------------------------------------------------------------------------
 
     - name: Set Timezone
@@ -26,18 +32,12 @@
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
-    - name: Disable SELinux
-      selinux:
-        state: disabled
- 
-# ------------------------------------------------------------------------------------------------------------------------------------
-
     - name: Set Authorized Key (root)
       authorized_key:
         user: root
         key: "{{ item }}"
         state: present
-        exclusive: True
+        exclusive: yes
       with_file:
         - "{{ filestore }}/User/.ssh/id_rsa_{{ ansible_deployer }}.pub"
 
@@ -48,14 +48,34 @@
         groups: wheel,docker
         append: yes
 
-    - name: Set Authorized Key
+    - name: Set Authorized Key (user)
       authorized_key:
         user: "{{ ansible_deployer }}"
         key: "{{ item }}"
         state: present
-        exclusive: True
+        exclusive: yes
       with_file:
         - "{{ filestore }}/User/.ssh/id_rsa_{{ ansible_deployer }}.pub"
+
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    - name: Configure Bashrc (root)
+      vars:
+        - color: "31"
+      template:
+        src: "./templates/bashrc.j2"
+        dest: "~/.bashrc"
+        mode: 0644
+
+    - name: Configure Bashrc (user)
+      become: yes
+      become_user: "{{ ansible_deployer }}"
+      vars:
+        - color: "33"
+      template:
+        src: "./templates/bashrc.j2"
+        dest: "~/.bashrc"
+        mode: 0644
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -74,29 +94,37 @@
         name: "{{ item }}"
         state: present
       with_items:
+        - epel-release
+        - yum-utils
         - vim
         - wget
         - figlet
 
+# ------------------------------------------------------------------------------------------------------------------------------------
+
     - name: Enable Services
       service: "name={{ item }} state=started enabled=yes"
       with_items:
+        - chronyd
         - docker
+      ignore_errors: yes
 
     - name: Disable Services
       service: "name={{ item }} state=stopped enabled=no"
       with_items:
-        - rpcbind
-        - rpcbind.socket
-        - systemd-resolved
         - firewalld
+        - rpcbind
+        - postfix
+        - systemd-resolved
+      ignore_errors: yes
 
     - name: Mask Services
       service: "name={{ item }} masked=yes"
       with_items:
-        - selinux-autorelabel-mark
-        - rpcbind
         - firewalld
+        - rpcbind
+        - selinux-autorelabel-mark
+      ignore_errors: yes
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -123,7 +151,7 @@
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
-    - name: Set Grub
+    - name: Grub Defaults
       copy:
         src: "./files/grub"
         dest: "/etc/default/"
@@ -132,19 +160,32 @@
         mode: 0644
       register: grub
 
-    - name: Make Grub
+    - name: Grub Config (Needs Reboot!)
       shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
       when: grub.changed
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
-    - name: Copy Docker-Destroy
-      copy:
-        src: "./files/docker-destroy"
-        dest: "/usr/local/bin/"
-        owner: root
-        group: root
-        mode: 0755
+    - name: Update System
+      yum:
+        name: "*"
+        state: latest
+        # update_cache: yes
+
+    - name: Update System (Needs Reboot!)
+      shell: |
+        needs-restarting -r
+      failed_when: false
+      register: update
+      changed_when: update.stdout is search("Reboot is required")
+
+# ====================================================================================================================================
+
+    # - name: Reboot System
+    #   reboot:
+    #     reboot_timeout: 3600
+    #     msg: "Rebooting System..."
+    #   when: update.changed or grub.changed
 
 # ====================================================================================================================================
 

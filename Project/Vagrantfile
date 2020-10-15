@@ -3,23 +3,19 @@
 
 #====================================================================================================================================
 
-VDI_CONVERT = false
-VDI_SIZE = 20480
-
-VMDK_WIN = "#{ENV.fetch("VAGRANT_VMDK_WIN")}"
-VDI_WIN = "#{ENV.fetch("VAGRANT_VDI_WIN")}"
-VDI_WSL = "#{ENV.fetch("VAGRANT_VDI_WSL")}"
-
-#====================================================================================================================================
-
 Vagrant.configure("2") do |config|
 
 #------------------------------------------------------------------------------------------------------------------------------------
 
+  config.vm.box_check_update = false
+
   config.vm.box = "arabadj/centos8-powerbox"
-  # config.vm.box_version = "1.0.5"
+  config.vm.box_version = "3.0.34"
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  config.vm.synced_folder './synced_cmd', '/cmd', 
+    owner: "root", group: "root", mount_options: ["dmode=755,fmode=755"]
 
   config.vm.synced_folder './synced_folder', '/vagrant', 
     owner: "root", group: "root", mount_options: ["dmode=755,fmode=644"]
@@ -28,16 +24,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.hostname = "#{ENV.fetch("VAGRANT_HOSTNAME")}"
   config.vm.provider "virtualbox" do |vb|
-    if ARGV[0] == "up" && !File.exist?(File.expand_path(VDI_WSL)) && VDI_CONVERT
-      vb.customize "pre-boot", ["clonehd", VMDK_WIN, VDI_WIN, "--format", "VDI"]
-      vb.customize "pre-boot", ["modifyhd", VDI_WIN, "--resize", VDI_SIZE]
-      vb.customize "pre-boot", ["storageattach", :id, "--storagectl", "IDE", "--port", 0, "--device", 0, "--type", "hdd", "--medium", VDI_WIN]
-      vb.customize "pre-boot", ["closemedium", VMDK_WIN, "--delete"]
-    end
-    vb.customize ["modifyvm", :id, "--natnet1", "#{ENV.fetch("VAGRANT_NETWORK_NAT")}"]
     vb.name = "#{ENV.fetch("VAGRANT_HOSTNAME")}"
     vb.memory = 2048
     vb.cpus = 2
+    vb.customize ["modifyvm", :id, "--natnet1", "#{ENV.fetch("VAGRANT_NETWORK_NAT")}"]
+    vb.customize ["modifyvm", :id, "--audio", "none"]
   end
 
 #------------------------------------------------------------------------------------------------------------------------------------
@@ -83,20 +74,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "vagrant-deplenv", type: "ansible" do |ansible|
     ansible.playbook = "#{ENV.fetch("CONFIGURE_ROOT")}/vagrant-deplenv.yml"
-  end
-
-#------------------------------------------------------------------------------------------------------------------------------------
-# If you want to etend disk size:
-# set: VDI_CONVERT = true
-# run: DISK_EXTEND.sh
-#------------------------------------------------------------------------------------------------------------------------------------
-
-  config.vm.provision "disk_extend", run: "never", type: "shell" do |shell|
-    shell.inline = <<-EXTEND
-      echo ", +" | sfdisk -N 1 /dev/sda --no-reread
-      partprobe
-      xfs_growfs /dev/sda1
-      EXTEND
   end
 
 #====================================================================================================================================
