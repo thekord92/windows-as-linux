@@ -40,6 +40,6 @@ export LC_ALL=en_US.UTF-8
 # GPG
 export GPG_TTY=$(tty)
 
-# LOAD-SECRETS
-[ -f ~/.load-secrets ] && [ -x ~/.local/gbin/load-secrets ] && . ~/.local/gbin/load-secrets
+# ENV-SECRETS
+[ -f ~/.env-secrets ] && [ -x ~/.local/gbin/env-secrets ] && . ~/.local/gbin/env-secrets
 [ "$LOAD_SECRETS_WARN" == "true" ] && export PS1='\[\033[{{ color }}m\]\u@\H:\[\033[34m\]\w\[\033[31m\]!\[\033[00m\] '
