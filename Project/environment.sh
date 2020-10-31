@@ -7,13 +7,13 @@ export USER_WIN="$(whoami.exe | cut -d '\' -f 2 | tr -d '\n' | tr -d '\r')" # Yo
 export HOME_WSL="$HOME" # Your Linux home
 export HOME_WIN="/mnt/c/Users/$USER_WIN" # Your Windows home
 export ARTIFACTS="$HOME_WIN/Artifacts/$PROJECT_NAME" # Copy Artifact examples here from repo
-export DEPLOYER="$USER_WSL"
+export DEPLOYER="$USER_WSL" # Your deployment username
 #---------------------------------------------------------------------------------------------------------------------------
 export CONFIGURE_ROOT="$PROJECT_ROOT/provisioning"
 #---------------------------------------------------------------------------------------------------------------------------
 export WSL_REMOTE_PORT="2222"
 #---------------------------------------------------------------------------------------------------------------------------
-export VAGRANT_HOSTNAME="vgr-wal" # Set your vm name
+export VAGRANT_HOSTNAME="$PROJECT_NAME" # Set your vm name
 export VAGRANT_ID="10" # ID is appended to sbnet and port
 export VAGRANT_NETPREFIX_NAT="192.168.71"
 export VAGRANT_NETPREFIX_PRIVATE="192.168.73" # Check with your "VirtualBox Host-Only Network" adapter subnet !!!

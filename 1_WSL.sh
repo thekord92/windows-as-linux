@@ -23,6 +23,7 @@ export HOME_WSL="$HOME" # Your Linux home
 export HOME_WIN="/mnt/c/Users/$USER_WIN" # Your Windows home
 export ARTIFACTS="$HOME_WIN/Artifacts/$PROJECT_NAME" # Copy Artifact examples here from repo
 export DEPLOYER="$USER_WSL"
+#
 
 # Enable SUDO with NOPASSWD: sudo vi /etc/sudoers
 # Edit Lines:
@@ -59,7 +60,9 @@ wsl.exe -t Ubuntu
 #
 sudo apt update
 sudo apt upgrade
+#
 sudo apt install wget
+sudo apt install git
 #
 
 # Configure SSH (if have your keys in Windows SSH Home)

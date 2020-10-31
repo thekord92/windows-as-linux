@@ -24,6 +24,7 @@ export HOME_WSL="$HOME" # Your Linux home
 export HOME_WIN="/mnt/c/Users/$USER_WIN" # Your Windows home
 export ARTIFACTS="$HOME_WIN/Artifacts" # Copy Artifact examples here from repo
 export DEPLOYER="$USER_WSL"
+#
 
 #===Vagrant=================================================================================================================
 
@@ -37,6 +38,7 @@ ssh-keygen -f /mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant -C "user@domain.com" # 
 mv /mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant /mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.key
 chmod 644 /mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.pub
 chmod 600 /mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.key
+#
 
 # Add Vagrant Variable: vi ~/.bashrc
 #
