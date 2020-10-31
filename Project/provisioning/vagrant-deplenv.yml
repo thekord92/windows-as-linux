@@ -7,7 +7,7 @@
   
   vars:
     - ansible_deployer: "{{ lookup('env','ANSIBLE_DEPLOYER') }}"
-    - filestore: "{{ lookup('env','FILESTORE') }}"
+    - artifacts: "{{ lookup('env','ARTIFACTS') }}"
 
     - bindir: "~/.local/bin"
     - downloads: "~/install"
@@ -132,7 +132,7 @@
       become: yes
       become_user: "{{ ansible_deployer }}"
       copy:
-        src: "{{ filestore }}/User/.local/gbin"
+        src: "{{ artifacts }}/home/{{ ansible_deployer }}/.local/gbin"
         dest: "~/.local/"
         mode: 0755
 

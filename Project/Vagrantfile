@@ -64,8 +64,8 @@ Vagrant.configure("2") do |config|
 #------------------------------------------------------------------------------------------------------------------------------------
 # If you want to configure with Ansible:
 # uncomment provisioners below
-# have your artifacts in $FILESTORE
-# check artifacts paths in playbooks starting with {{ filestore }} variable
+# have your artifacts in $ARTIFACTS
+# check artifacts paths in playbooks starting with {{ artifacts }} variable
 #------------------------------------------------------------------------------------------------------------------------------------
 
   config.vm.provision "vagrant-bootstrap", type: "ansible" do |ansible|

@@ -7,7 +7,7 @@
   
   vars:
     - ansible_deployer: "{{ lookup('env','ANSIBLE_DEPLOYER') }}"
-    - filestore: "{{ lookup('env','FILESTORE') }}"
+    - artifacts: "{{ lookup('env','ARTIFACTS') }}"
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@
         state: present
         exclusive: True
       with_file:
-        - "{{ filestore }}/User/.ssh/id_rsa_{{ ansible_deployer }}.pub"
+        - "{{ artifacts }}/home/{{ ansible_deployer }}/.ssh/id_rsa_{{ ansible_deployer }}.pub"
 
     - name: Authorized_Keys
       authorized_key:
@@ -36,7 +36,7 @@
         state: present
         exclusive: True
       with_file:
-        - "{{ filestore }}/User/.ssh/id_rsa_{{ ansible_deployer }}.pub"
+        - "{{ artifacts }}/home/{{ ansible_deployer }}/.ssh/id_rsa_{{ ansible_deployer }}.pub"
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
