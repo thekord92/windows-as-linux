@@ -97,8 +97,8 @@ sudo service ssh --full-restart
 # Install SSH Keys loader (optional)
 #
 mkdir -p $HOME_WSL/.local/gbin
-wget -P $HOME_WSL/.local/gbin/ https://raw.githubusercontent.com/arabadj/windows-as-linux/master/Artifacts/User/.local/gbin/ssh-load-linux
-wget -P $HOME_WSL/.local/gbin/ https://raw.githubusercontent.com/arabadj/windows-as-linux/master/Artifacts/User/.local/gbin/ssh-load-windows
+wget -P $HOME_WSL/.local/gbin/ https://raw.githubusercontent.com/arabadj/public-scripts/main/ssh-load-linux
+wget -P $HOME_WSL/.local/gbin/ https://raw.githubusercontent.com/arabadj/public-scripts/main/ssh-load-windows
 chmod +x $HOME_WSL/.local/gbin/ssh-load-*
 #
 $HOME_WSL/.local/gbin/ssh-load-linux install
