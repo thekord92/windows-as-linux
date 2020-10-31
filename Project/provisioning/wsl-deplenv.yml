@@ -125,7 +125,7 @@
         msg: " !!!WARNING!!! Install Vagrant: \" sudo apt install {{ downloads }}/vagrant_{{ vagrant_version }}_x86_64.deb \" !!!WARNING!!!"
       when: not vagrant.stat.exists
 
-    - name: Set Gbin 
+    - name: Set Vagrant 
       lineinfile:
         dest: "~/.bashrc"
         state: present
