@@ -11,7 +11,7 @@ exit 0
 
 # Set your VirtualBox "Default Machine Folder" with gui to:
 #
-# C:\Users\$DEPLOYER\VirtualBox
+# C:\Users\$USER_WIN\VirtualBox
 
 #===========================================================================================================================
 

@@ -9,10 +9,6 @@ exit 0
 
 #===Ansible=================================================================================================================
 
-#---------------------------------------------------------------------------------------------------------------------------
-# !!!!!! Follow WSL.sh first !!!!!!
-#---------------------------------------------------------------------------------------------------------------------------
-
 # Export Variables
 #
 export PROJECT_NAME="windows-as-linux"
@@ -27,22 +23,6 @@ export DEPLOYER="$USER_WSL"
 # Install ANSIBLE
 #
 sudo apt install ansible
-#
-
-# Clone Repo
-#
-mkdir -p $HOME_WIN/Learning/Projects
-#
-[ ! -d $HOME_WIN/Learning/Projects/$PROJECT_NAME ] && git -C $HOME_WIN/Learning/Projects clone https://github.com/arabadj/$PROJECT_NAME.git
-[ -d $HOME_WIN/Learning/Projects/$PROJECT_NAME ] && git -C $HOME_WIN/Learning/Projects/$PROJECT_NAME pull 
-#
-
-# Fix Repo
-#
-cd $HOME_WIN/Learning/Projects/$PROJECT_NAME/
-git config --unset core.filemode
-git config --unset core.autocrlf
-git config --unset core.ignorecase
 #
 
 # Generate Artifacts from WSL (!!! IF DO NOT HAVE !!!)
