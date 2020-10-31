@@ -167,18 +167,18 @@
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
-    - name: Update System
-      yum:
-        name: "*"
-        state: latest
-        # update_cache: yes
+    # - name: Update System
+    #   yum:
+    #     name: "*"
+    #     state: latest
+    #     # update_cache: yes
 
-    - name: Update System (Needs Reboot!)
-      shell: |
-        needs-restarting -r
-      failed_when: false
-      register: update
-      changed_when: update.stdout is search("Reboot is required")
+    # - name: Update System (Needs Reboot!)
+    #   shell: |
+    #     needs-restarting -r
+    #   failed_when: false
+    #   register: update
+    #   changed_when: update.stdout is search("Reboot is required")
 
 # ====================================================================================================================================
 

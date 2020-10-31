@@ -72,9 +72,9 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "#{ENV.fetch("CONFIGURE_ROOT")}/vagrant-bootstrap.yml"
   end
 
-  config.vm.provision "vagrant-deplenv", type: "ansible" do |ansible|
-    ansible.playbook = "#{ENV.fetch("CONFIGURE_ROOT")}/vagrant-deplenv.yml"
-  end
+  # config.vm.provision "vagrant-deplenv", type: "ansible" do |ansible|
+  #   ansible.playbook = "#{ENV.fetch("CONFIGURE_ROOT")}/vagrant-deplenv.yml"
+  # end
 
 #====================================================================================================================================
 

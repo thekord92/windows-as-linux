@@ -18,8 +18,12 @@ exit 0
 
 # Export Variables
 #
-export DEPLOYER="$USER" # Try to have Windows and WSL usernames same
-export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts" # Just emulate Linux file tree for artifacts
+export USER_WSL="$USER" # Your Linux username
+export USER_WIN="$(whoami.exe | cut -d '\' -f 2 | tr -d '\n' | tr -d '\r')" # Your Windows username
+export HOME_WSL="$HOME" # Your Linux home
+export HOME_WIN="/mnt/c/Users/$USER_WIN" # Your Windows home
+export FILESTORE="$HOME_WIN/Artifacts" # Copy Artifact examples here from repo
+export DEPLOYER="$USER_WSL"
 
 #===Vagrant=================================================================================================================
 

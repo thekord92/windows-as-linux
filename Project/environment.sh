@@ -1,10 +1,14 @@
 #!/bin/bash
 
 #===VARIABLES===============================================================================================================
-export DEPLOYER="$USER" # Put your username here
+export USER_WSL="$USER" # Your Linux username
+export USER_WIN="$(whoami.exe | cut -d '\' -f 2 | tr -d '\n' | tr -d '\r')" # Your Windows username
+export HOME_WSL="$HOME" # Your Linux home
+export HOME_WIN="/mnt/c/Users/$USER_WIN" # Your Windows home
+export FILESTORE="$HOME_WIN/Artifacts" # Copy Artifact examples here from repo
+export DEPLOYER="$USER_WSL"
 #---------------------------------------------------------------------------------------------------------------------------
 export CONFIGURE_ROOT="$PROJECT_ROOT/provisioning"
-export FILESTORE="/mnt/c/Users/$DEPLOYER/Artifacts" # Copy Artifact examples here from repo
 #---------------------------------------------------------------------------------------------------------------------------
 export WSL_REMOTE_PORT="2222"
 #---------------------------------------------------------------------------------------------------------------------------
@@ -15,9 +19,9 @@ export VAGRANT_NETPREFIX_PRIVATE="192.168.73" # Check with your "VirtualBox Host
 export VAGRANT_NETWORK_NAT="$VAGRANT_NETPREFIX_NAT.0/24"
 export VAGRANT_NETWORK_PRIVATE="$VAGRANT_NETPREFIX_PRIVATE.$VAGRANT_ID"
 export VAGRANT_SSH_PORT="22$VAGRANT_ID" # Do not edit
-export VAGRANT_SSH_PRIVATE_KEY="/mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.key"
-export VAGRANT_SSH_PUBLIC_KEY="/mnt/c/Users/$DEPLOYER/.ssh/id_rsa_vagrant.pub"
-export VAGRANT_SSH_INSECURE_KEY="/mnt/c/Users/$DEPLOYER/.vagrant.d/insecure_private_key" # Comes with Vagrant
+export VAGRANT_SSH_PRIVATE_KEY="$HOME_WIN/.ssh/id_rsa_vagrant.key"
+export VAGRANT_SSH_PUBLIC_KEY="$HOME_WIN/.ssh/id_rsa_vagrant.pub"
+export VAGRANT_SSH_INSECURE_KEY="$HOME_WIN/.vagrant.d/insecure_private_key" # Comes with Vagrant
 #---------------------------------------------------------------------------------------------------------------------------
 export ANSIBLE_DEPLOYER="$DEPLOYER"
 export ANSIBLE_ACTION_WARNINGS="False"

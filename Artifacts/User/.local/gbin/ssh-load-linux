@@ -21,7 +21,7 @@ if [ "$1" == "install" ] && [ -z "$SSH_LOAD_ENV" ]; then
     echo "     . $SSH_LOAD_PATH/$SSH_LOAD_NAME" >> $HOME/.bashrc
     echo "fi" >> $HOME/.bashrc
     echo "" >> $HOME/.bashrc
-    echo "Reload your shell, please."
+    source $HOME/.bashrc
 fi
 
 export SSH_HOME="/home/$USER/.ssh"
