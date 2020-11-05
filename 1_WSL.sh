@@ -68,8 +68,8 @@ sudo apt install git
 # Configure SSH (if have your keys in Windows SSH Home)
 #
 mkdir -p $HOME_WSL/.ssh && chmod 700 $HOME_WSL/.ssh
-cp $HOME_WIN/.ssh/id_rsa_*.pub $HOME_WSL/.ssh/ && chmod 644 $HOME_WSL/.ssh/id_rsa_*.pub
-cp $HOME_WIN/.ssh/id_rsa_*.key $HOME_WSL/.ssh/ && chmod 600 $HOME_WSL/.ssh/id_rsa_*.key
+cp "$HOME_WIN/.ssh/id_rsa_$USER_WSL.pub" $HOME_WSL/.ssh/ && chmod 644 $HOME_WSL/.ssh/id_rsa_$USER_WSL.pub
+cp "$HOME_WIN/.ssh/id_rsa_$USER_WSL.key" $HOME_WSL/.ssh/ && chmod 600 $HOME_WSL/.ssh/id_rsa_$USER_WSL.key
 cat $HOME_WSL/.ssh/id_rsa_$USER_WSL.pub > $HOME_WSL/.ssh/authorized_keys
 #
 
