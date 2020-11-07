@@ -22,6 +22,7 @@ $env:path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";
 # Setup SSH
 #
 "C:\Program Files\OpenSSH-Win64\install-sshd.ps1"
+powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
 Set-Service -Name sshd -StartupType 'Disabled'
 Set-Service -Name ssh-agent -StartupType 'Automatic'
 
