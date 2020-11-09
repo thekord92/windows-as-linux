@@ -12,12 +12,13 @@ exit 0
 # Export Variables
 #
 export PROJECT_NAME="windows-as-linux"
+export SPACE="Labspace"
 export USER_WSL="$USER" # Your Linux username
 export USER_WIN="$(whoami.exe | cut -d '\' -f 2 | tr -d '\n' | tr -d '\r')" # Your Windows username
 export HOME_WSL="$HOME" # Your Linux home
 export HOME_WIN="/mnt/c/Users/$USER_WIN" # Your Windows home
-export ARTIFACTS="$HOME_WIN/Artifacts/$PROJECT_NAME" # Copy Artifact examples here from repo
-export DEPLOYER="$USER_WSL"
+export ARTIFACTS="$HOME_WIN/OneDrive/Artifacts/$SPACE" # Copy Artifact examples here from repo
+export DEPLOYER="$USER_WSL" # Your deployment username
 #
 
 # Clone Repo
